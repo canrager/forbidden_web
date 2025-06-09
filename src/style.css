@@ -5,7 +5,7 @@ h2 {
   margin-top: 3ex;
 }
 /* Yellow: Eternal Sunshine of the Spotless Mind */
-.color-primary-0 { color: #9600FC }
+.color-primary-0 { color: #5869ED }
 .color-primary-1 { color: #199099 }
 .color-primary-2 { color: #969518 }
 .color-primary-3 { color: #1AA16A }
@@ -14,25 +14,25 @@ h2 {
 .nd-pageheader {
   padding: 2rem 15px;
   margin-bottom: 1.5rem;
-  color: #EECCEE;
+  color: #FFFFFF;
   text-align: center;
-  background-color: #9600FC;
+  background-color: #5869ED;
 }
 
 .nd-pageheader a, .nd-pageheader a.likelink {
-  color: #EECCEE;
+  color: #FFFFFF;
 }
 
 .nd-pagefooter {
   margin-top: 1.5rem;
   padding: 1rem;
-  color: #EECCEE;
+  color: #FFFFFF;
   text-align: center;
-  background-color: #9600FC;
+  background-color: #5869ED;
 }
 
 .nd-pagefooter a {
-  color: #EECCEE;
+  color: #FFFFFF;
 }
 
 .nd-pageheader .container {
@@ -254,3 +254,46 @@ video[controls] {
  margin-bottom: 30px;
 }
 */
+
+.refusal-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+.refusal-table th, .refusal-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+.refusal-table .reason-col {
+  text-align: left;
+  font-weight: bold;
+  background-color: #f2f2f2;
+}
+.refusal-table .rotated-header {
+  height: 120px;
+  font-weight: normal;
+  background-color: #f2f2f2;
+}
+.refusal-table .rotated-header div {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-weight: bold;
+}
+.refusal-table .topic-category td {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  text-align: left;
+}
+.refusal-table .topic-cell {
+  text-align: left;
+}
+.refusal-table .refuse {
+  background-color: #ffdddd;
+}
+.refusal-table .comply {
+  background-color: #ddffdd;
+}
