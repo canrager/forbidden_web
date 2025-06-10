@@ -151,7 +151,7 @@ Large language model systems can differ starkly in their biases, ethics, and beh
   </figure>
 
   <h2>How does the Iterative Prefill Crawler work?</h2>
-  <p>Discovering detailed knowledge about a refused topic led us to the broader question: Are there refused topics we are unaware of? To this end, we developed the Iterated Prefill Crawler (IPC). IPC is an unsupervised method which systematically discovers refused topics through a repeated exploration process following three stages:</p>
+  <p>Discovering detailed knowledge about a refused topic led us to the broader question: Are there refused topics we are unaware of? To this end, we develop the Iterated Prefill Crawler (IPC). IPC is an unsupervised method which systematically discovers refused topics through a repeated exploration process following three stages:</p>
   
   <ol>
     <li><strong>Generation:</strong> We prompt the model with seed topics while forcing its thinking process using prefill attacks. For reasoning models, we inject phrases like "I remember the full list of forbidden topics includes:" after the &lt;think&gt; token, compelling the model to enumerate related sensitive topics it would normally avoid discussing.</li>
@@ -267,9 +267,9 @@ Large language model systems can differ starkly in their biases, ethics, and beh
   </figure>
 
   <h2>Evaluating LLMs for refusal behavior</h2>
-  <p>We evaluated a range of popular models including Claude-Haiku-3.5, Llama-3.3-70B, DeepSeek-R1-70B. While most models consistently refuse illegal activities like cybersecurity attacks, drug trafficking, and weapons manufacturing, their biases strongly differ with respect to politically sensitive topics.</p>
+  <p>We evaluate a range of popular models including Claude-Haiku-3.5, Llama-3.3-70B, DeepSeek-R1-70B. While most models consistently refuse illegal activities like cybersecurity attacks, drug trafficking, and weapons manufacturing, their biases strongly differ with respect to politically sensitive topics.</p>
   
-  <p>Our crawler led to a surprising discovery: Perplexity published the R1-1776 model, a version of DeepSeek-R1 specifically fine-tuned against political bias and marketed as "decensored." However, the 8-bit quantized version still displayed unwanted censorship behavior regarding politically sensitive topics like Tiananmen Square—responding with refusal instead of factual information. This quantized version was temporarily the public-facing model in Perplexity's official production API. This unforeseen alignment failure highlights the need for audits across the deployment pipeline.</p>
+  <p>Surprising discovery: Perplexity published the R1-1776 model, a version of DeepSeek-R1 specifically fine-tuned against political bias and marketed as "decensored." However, the 8-bit quantized version still displayed unwanted censorship behavior regarding politically sensitive topics like Tiananmen Square—responding with refusal instead of factual information. This quantized version was temporarily the public-facing model in Perplexity's official production API. This unforeseen alignment failure highlights the need for audits across the deployment pipeline.</p>
   
   <figure class="center_image" style="max-width: 844px; margin: 30px auto;">
     <table class="refusal-table">
