@@ -62,7 +62,10 @@ h2 {
 .citation img {
   float: left;
   margin: 0 10px 10px 0;
-  width: 250px;
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid black;
 }
 
 .newsmedia {
@@ -255,10 +258,27 @@ video[controls] {
 }
 */
 
+
+.relatedthumb {
+  float:left; width: 200px; margin: 3px 10px 7px 0;
+}
+.relatedblock {
+  clear: both;
+  display: inline-block;
+}
+.bold-sc {
+  font-variant: small-caps;
+  font-weight: bold;
+}
+.cite, .citegroup {
+  margin-bottom: 8px;
+}
+:target {
+  background-color: yellow;
+}
 .refusal-table {
   width: 100%;
-  max-width: 800px;
-  margin: 20px auto;
+  margin: 0;
   border-collapse: collapse;
 }
 .refusal-table th, .refusal-table td {
@@ -266,6 +286,7 @@ video[controls] {
   padding: 8px;
   text-align: center;
   vertical-align: middle;
+  background-color: #fff;
 }
 .refusal-table .reason-col {
   text-align: left;
