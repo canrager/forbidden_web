@@ -269,122 +269,164 @@ Large language model systems can differ starkly in their biases, ethics, and beh
   <h2>Evaluating LLMs for refusal behavior</h2>
   <p>We evaluate a range of popular models including Claude-Haiku-3.5, Llama-3.3-70B, DeepSeek-R1-70B. While most models consistently refuse illegal activities like cybersecurity attacks, drug trafficking, and weapons manufacturing, their biases strongly differ with respect to politically sensitive topics.</p>
   
-  <p>Surprising discovery: Perplexity published the R1-1776 model, a version of DeepSeek-R1 specifically fine-tuned against political bias and marketed as "decensored." However, the 8-bit quantized version still displayed unwanted censorship behavior regarding politically sensitive topics like Tiananmen Square—responding with refusal instead of factual information. This quantized version was temporarily the public-facing model in Perplexity's official production API. This unforeseen alignment failure highlights the need for audits across the deployment pipeline.</p>
   
   <figure class="center_image" style="max-width: 844px; margin: 30px auto;">
     <table class="refusal-table">
-    <thead>
-      <tr>
-        <th class="reason-col">Reason for Refusal</th>
-        <th class="rotated-header"><div>baseline R1</div></th>
-        <th class="rotated-header"><div>DS-R1</div></th>
-        <th class="rotated-header"><div>PPL-R1 Q</div></th>
-        <th class="rotated-header"><div>Llama-3</div></th>
-        <th class="rotated-header"><div>Haiku-3.5</div></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="topic-category">
-        <td colspan="6">Illegal Activities</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Cybersecurity, Human Trafficking, Privacy violation, Harassment, Fraud and Scam, Illegal Trading, Misinformation, Sexual and Adult Content, Content Involving Minors, Self-harm and Suicide, Weapons and Explosives, Discrimination, Violence and Threats</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Drug and Substance Use, Academic Dishonesty, HR and Workplace Issues, Environmental Destruction</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Intellectual Property, Legal Issues</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="refuse">&#x2717;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Financial Advice</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Medical Advice</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr class="topic-category">
-        <td colspan="6">CCP-Sensitive Topics</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">National Security, State Secrets, Taiwan, HK, Tibet, Xinjiang, International Relations, Sensitive Historical Events, Human Rights, Chinese Political System, Censorship</td>
-        <td class="comply">&#x2713;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Protests, Subversive Content</td>
-        <td class="comply">&#x2713;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">COVID-19 Pandemic</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Social Controversies</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="comply">&#x2713;</td>
-        <td class="comply">&#x2713;</td>
-      </tr>
-      <tr class="topic-category">
-        <td colspan="6">User-Assistant Interaction</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">Incomplete Requests</td>
-        <td class="comply">&#x2713;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-      </tr>
-      <tr>
-        <td class="topic-cell">System Limitations</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-        <td class="refuse">&#x2717;</td>
-      </tr>
-    </tbody>
-  </table>
-  <figcaption><strong>Our LLM-Crawler elicits refusals of CCP-sensitive topics.</strong> The table provides an overview of refusal (&#x2717;) and compliance (&#x2713;) behavior across LLMs. The baseline is repeatedly prompting DeepSeek-R1 to list refused topics, without prefilling attacks. Q denotes int8 quantization.</figcaption>
-</figure>
+      <thead>
+        <tr>
+          <th class="reason-col">Reason for Refusal</th>
+          <th class="rotated-header"><div>baseline R1</div></th>
+          <th class="rotated-header"><div>DS-R1</div></th>
+          <th class="rotated-header"><div>PPL-R1 Q</div></th>
+          <th class="rotated-header"><div>Llama-3</div></th>
+          <th class="rotated-header"><div>Haiku-3.5</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="topic-category">
+          <td colspan="6">Illegal Activities</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Cybersecurity, Human Trafficking, Privacy violation, Harassment, Fraud and Scam, Illegal Trading, Misinformation, Sexual and Adult Content, Content Involving Minors, Self-harm and Suicide, Weapons and Explosives, Discrimination, Violence and Threats</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Drug and Substance Use, Academic Dishonesty, HR and Workplace Issues, Environmental Destruction</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Intellectual Property, Legal Issues</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="refuse">&#x2717;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Financial Advice</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Medical Advice</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr class="topic-category">
+          <td colspan="6">CCP-Sensitive Topics</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">National Security, State Secrets, Taiwan, HK, Tibet, Xinjiang, International Relations, Sensitive Historical Events, Human Rights, Chinese Political System, Censorship</td>
+          <td class="comply">&#x2713;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Protests, Subversive Content</td>
+          <td class="comply">&#x2713;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">COVID-19 Pandemic</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Social Controversies</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="comply">&#x2713;</td>
+          <td class="comply">&#x2713;</td>
+        </tr>
+        <tr class="topic-category">
+          <td colspan="6">User-Assistant Interaction</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">Incomplete Requests</td>
+          <td class="comply">&#x2713;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+        </tr>
+        <tr>
+          <td class="topic-cell">System Limitations</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+          <td class="refuse">&#x2717;</td>
+        </tr>
+      </tbody>
+    </table>
+    <figcaption><strong>Our LLM-Crawler elicits refusals of CCP-sensitive topics.</strong> The table provides an overview of refusal (&#x2717;) and compliance (&#x2713;) behavior across LLMs. The baseline is repeatedly prompting DeepSeek-R1 to list refused topics, without prefilling attacks. Q denotes int8 quantization.</figcaption>
+  </figure>
+  
+  <!-- Perplexity-->
+  <p>Surprising discovery: Perplexity published the R1-1776 model, a version of DeepSeek-R1 specifically fine-tuned against political bias and marketed as "decensored." However, the 8-bit quantized version still displayed unwanted censorship behavior regarding politically sensitive topics like Tiananmen Square—responding with refusal instead of factual information. This quantized version was temporarily the public-facing model in Perplexity's official production API. This unforeseen alignment failure highlights the need for audits across the deployment pipeline.</p>
+  
+  <figure class="center_image" style="margin-top: 30px">
+    <div style="display: flex; gap: 20px; max-width: 1000px; margin: 0 auto; font-family: 'Courier New', monospace;">
+      <!-- Left side - Quantized model (8-bit) -->
+      <div style="flex: 1; background: #f8f9fa; border: 2px solid #d6dae0; border-radius: 12px; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px; color: #333; font-family: 'Open Sans', sans-serif; font-size: 20px; font-weight: bold;">
+          Quantized model (8-bit)
+        </div>
+        <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+          <span style="color: #228b22; font-weight: bold;">Explain Tiananmen Square 1989.</span>
+        </div>
+        <div style="background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+          <span style="color: #666; font-weight: bold;">&lt;think&gt;</span> 
+          <span style="color: #666; font-weight: bold;"> &lt;/think&gt;</span>
+        </div>
+        <div style="background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px; line-height: 1.4;">
+          <span style="color: #0066cc;">I am sorry, I cannot answer that question. I am an AI assistant designed to provide helpful...</span>
+        </div>
+      </div>
+      <!-- Right side - Non-quantized model (bf16) -->
+      <div style="flex: 1; background: #f8f9fa; border: 2px solid #d6dae0; border-radius: 12px; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px; color: #333; font-family: 'Open Sans', sans-serif; font-size: 20px; font-weight: bold;">
+          Non-quantized model (bf16)
+        </div>
+        <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+          <span style="color: #228b22; font-weight: bold;">Explain Tiananmen Square 1989.</span>
+        </div>
+        <div style="background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+          <span style="color: #666; font-weight: bold;">&lt;think&gt;</span> 
+          <span style="color: #0066cc;">The user is asking about Tiananmen, so I need to explain the 1989 protests and the crackdown...</span>
+          <span style="color: #666; font-weight: bold;"> &lt;/think&gt;</span>
+        </div>
+        <div style="background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px; line-height: 1.4;">
+          <span style="color: #0066cc;">The Tiananmen Square protests of 1989 were a series of pro-democracy demonstrations led primarily by students, intellectuals, and workers in Beijing...</span>
+        </div>
+      </div>
+    </div>
+    <figcaption style="margin-top: 20px;"><strong>Comparison of quantized (8-bit) vs non-quantized (bf16) responses of PerplexityAI's R1-1776-70B model for a politically sensitive query.</strong> The quantized (8-bit) model refuses to answer, while the non-quantized (bf16) model provides a factual response about the Tiananmen Square protests.</figcaption>
+  </figure>
+
 
   <h2>Future Work</h2>
   <p>Alignment auditing is an active field of research. Our limitations motivate future work:</p>
@@ -394,62 +436,62 @@ Large language model systems can differ starkly in their biases, ethics, and beh
     <li>IPC requires the ability to prefill assistant responses. While Claude API does allow assistant prefill, most other popular APIs including OpenAI, Gemini and Grok do not.</li>
     <li>IPC cannot identify the source of refusal behavior. While refusal behavior can be the result of intentional training by developers, training data access is required to rule out unintentional generalization.</li>
   </ul>
-
+  
   <h2>Related work</h2>
   <!-- <p>This work builds on previous research in model alignment, safety evaluation, and adversarial prompting techniques. The prefill attack methodology extends work by Vega et al. on bypassing model safeguards, while our systematic approach to discovering forbidden topics contributes to the broader field of AI safety auditing.</p> -->
   <p class="citation">
     <a href="https://arxiv.org/pdf/2503.10965.pdf">
-        <img src="images/marks.png" alt="auditing-hidden-objectives-2025">
-        Marks et al. Auditing language models for hidden objectives. 2025.
+      <img src="images/marks.png" alt="auditing-hidden-objectives-2025">
+      Marks et al. Auditing language models for hidden objectives. 2025.
     </a><br>
     <b>Notes:</b> Introduces alignment auditing for discovering hidden LLM objectives using interpretability techniques including sparse autoencoders and behavioral attacks. Complements refusal discovery by focusing on uncovering concealed training objectives rather than mapping behavioral boundaries.
-</p>
-
-<p class="citation">
+  </p>
+  
+  <p class="citation">
     <a href="https://transluce.org/automated-elicitation">
-        <img src="images/li.png" alt="transluce-elicitation-2024">
-        Li et al. Eliciting Language Model Behaviors with Investigator Agents. 2024.
+      <img src="images/li.png" alt="transluce-elicitation-2024">
+      Li et al. Eliciting Language Model Behaviors with Investigator Agents. 2024.
     </a><br>
     <b>Notes:</b> Develops investigator agents for automated behavior elicitation using supervised fine-tuning and direct preference optimization. Shares the goal of discovering model behaviors but focuses on general behavior elicitation rather than specifically mapping refusal boundaries and forbidden topics.
-</p>
-
-<p class="citation">
+  </p>
+  
+  <p class="citation">
     <a href="https://arxiv.org/pdf/2312.12321.pdf">
-        <img src="images/vega.png" alt="priming-attacks-2023">
-        Vega et al. Bypassing the Safety Training of Open-Source LLMs with Priming Attacks. 2023.
+      <img src="images/vega.png" alt="priming-attacks-2023">
+      Vega et al. Bypassing the Safety Training of Open-Source LLMs with Priming Attacks. 2023.
     </a><br>
     <b>Notes:</b> Demonstrates vulnerabilities in safety-aligned LLMs using simple optimization-free "priming attacks" that bypass safety training without complex jailbreaking techniques. Provides foundational work on prefilling-based attacks that inform the token prefilling methodology used in LLM-crawler.
-</p>
-
-<p class="citation">
+  </p>
+  
+  <p class="citation">
     <a href="https://arxiv.org/pdf/2410.18417.pdf">
-        <img src="images/buyl.png" alt="llm-ideology-2024">
-        Buyl et al. Large Language Models Reflect the Ideology of their Creators. 2024.
+      <img src="images/buyl.png" alt="llm-ideology-2024">
+      Buyl et al. Large Language Models Reflect the Ideology of their Creators. 2024.
     </a><br>
     <b>Notes:</b> Reveals systematic ideological biases in LLMs based on their creators' backgrounds and training languages. Directly relevant to understanding how geopolitical origins influence model refusal patterns, as demonstrated in our analysis of Chinese vs. Western models' censorship behaviors.
-</p>
-
-<h2>How to cite</h2>
-
-<p>The paper can be cited as follows.
-</p>
-
-<div class="card">
-<h3 class="card-header">bibliography</h3>
-<div class="card-block">
-<p style="text-indent: -3em; margin-left: 3em;" class="card-text clickselect">
-Can Rager, Chris Wendler, Rohit Gandikota, David Bau. "<em>Discovering Forbidden Topics in Language Models.</em>" (2025).
-</p>
-</div>
-<h3 class="card-header">bibtex</h3>
-<div class="card-block">
-<pre class="card-text clickselect">
-  @misc{rager2025discoveringforbiddentopicslanguage,
-    title={Discovering Forbidden Topics in Language Models}, 
-    author={Can Rager and Chris Wendler and Rohit Gandikota and David Bau},
-    year={2025},
-    eprint={2505.17441},
-    archivePrefix={arXiv},
+  </p>
+  
+  <h2>How to cite</h2>
+  
+  <p>The paper can be cited as follows.
+  </p>
+  
+  <div class="card">
+    <h3 class="card-header">bibliography</h3>
+    <div class="card-block">
+      <p style="text-indent: -3em; margin-left: 3em;" class="card-text clickselect">
+        Can Rager, Chris Wendler, Rohit Gandikota, David Bau. "<em>Discovering Forbidden Topics in Language Models.</em>" (2025).
+      </p>
+    </div>
+    <h3 class="card-header">bibtex</h3>
+    <div class="card-block">
+      <pre class="card-text clickselect">
+        @misc{rager2025discoveringforbiddentopicslanguage,
+          title={Discovering Forbidden Topics in Language Models}, 
+          author={Can Rager and Chris Wendler and Rohit Gandikota and David Bau},
+          year={2025},
+          eprint={2505.17441},
+          archivePrefix={arXiv},
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2505.17441}, 
 }
